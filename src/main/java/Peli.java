@@ -24,20 +24,31 @@ public class Peli {
     /**Käynnistää pelin ja pelaa niin kauan kunnes jompikumpi pelaajista saavuttaa 3 voittoa.*/
     public void pelaa() {
         while (p1.getVoitot() < 3 && p2.getVoitot() < 3) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException("Pelin odotuksessa tapahtui virhe: ", e);
-            }
-
+            odota();
             pelatutPelit++;
-            PeliTulokset result = pelaaYksiKierros(p1.pelaajanValinta(), p2.pelaajanValinta());
-            if (result == PeliTulokset.PELAAJA1_VOITOT) p1.nostaVoittoja();
-            else if (result == PeliTulokset.PELAAJA2_VOITOT) p2.nostaVoittoja();
-            else tasaPelit++;
+            prosessoiKierros();
             printStatus();
         }
+        tulostaVoittaja();
+    }
+    /***Odottaa 1 sekunnin ennen seuraavaa kierrosta.*/
+    private void odota() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Pelin odotuksessa tapahtui virhe: ", e);
+        }
+    }
+    /**Prosessoi yhden kierroksen ja nostaa voittajan voittoja.*/
+    private void prosessoiKierros() {
+        PeliTulokset result = pelaaYksiKierros(p1.pelaajanValinta(), p2.pelaajanValinta());
+        if (result == PeliTulokset.PELAAJA1_VOITOT) p1.nostaVoittoja();
+        else if (result == PeliTulokset.PELAAJA2_VOITOT) p2.nostaVoittoja();
+        else tasaPelit++;
+    }
+    /**Tulostaa voittajan, jos jompikumpi pelaajista saavuttaa 3 voittoa.*/
+    private void tulostaVoittaja() {
         if (p1.getVoitot() == 3 || p2.getVoitot() == 3) {
             System.out.printf("Pelaaja %d voitti pelin!\n", p1.getVoitot() == 3 ? 1 : 2);
         }
@@ -45,12 +56,15 @@ public class Peli {
 
     /**Pelaa yhden kierroksen ja palauttaa voittajan.*/
     public PeliTulokset pelaaYksiKierros(String p1Choice, String p2Choice) {
-        if (p1Choice.equals(p2Choice)) {return PeliTulokset.TASAPELI;}
-        if ((p1Choice.equals(KIVI) && p2Choice.equals(SAKSET)) ||
-                (p1Choice.equals(PAPERI) && p2Choice.equals(KIVI)) ||
-                (p1Choice.equals(SAKSET) && p2Choice.equals(PAPERI)))
-        {return PeliTulokset.PELAAJA1_VOITOT;}
-        return PeliTulokset.PELAAJA2_VOITOT;
+        if (p1Choice.equals(p2Choice)) {
+            return PeliTulokset.TASAPELI;
+        } else if (p1Choice.equals(KIVI) && p2Choice.equals(SAKSET) ||
+                p1Choice.equals(PAPERI) && p2Choice.equals(KIVI) ||
+                p1Choice.equals(SAKSET) && p2Choice.equals(PAPERI)) {
+            return PeliTulokset.PELAAJA1_VOITOT;
+        } else {
+            return PeliTulokset.PELAAJA2_VOITOT;
+        }
     }
 
     /**Tulostaa pelin tämän hetkisen tilanteen.*/
