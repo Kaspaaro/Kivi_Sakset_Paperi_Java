@@ -8,11 +8,9 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-/**
- * @author Kaspar Tullus
- *
- * */
+/**@author Kaspar Tullus */
 
+/**PeliTest - Testaa pelin toimintaa (Junit 5,Mockito)*/
 public class PeliTest {
     private Peli peli;
     private Pelaaja p1;

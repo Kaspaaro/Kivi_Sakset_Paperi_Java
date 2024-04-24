@@ -11,9 +11,9 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author Kaspar Tullus
- *
- * */
+ */
 
+/** PelaajaTest - Testaa pelaajan toimintaa (Junit 5,Mockito)*/
 public class PelaajaTest {
     private Peli peli;
     private Pelaaja p1, p2, pelaaja;
@@ -75,9 +75,9 @@ public class PelaajaTest {
      * Testaa pelaajan voittojen laskemista
      * */
     @Test
-    public void incrementVoitot_nostaVoittojaYhdellä() {
+    public void nostaVoittoja_nostaVoittojaYhdellä() {
         int initialVoitot = pelaaja.getVoitot();
-        pelaaja.incrementVoitot();
+        pelaaja.nostaVoittoja();
         assertEquals(initialVoitot + 1, pelaaja.getVoitot());
     }
 
@@ -86,8 +86,8 @@ public class PelaajaTest {
      * */
     @Test
     public void getVoitot_palauttaaLasketutVoitot() {
-        pelaaja.incrementVoitot();
-        pelaaja.incrementVoitot();
+        pelaaja.nostaVoittoja();
+        pelaaja.nostaVoittoja();
         assertEquals(2, pelaaja.getVoitot());
     }
 

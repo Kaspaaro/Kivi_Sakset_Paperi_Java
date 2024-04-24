@@ -21,6 +21,7 @@ public class Peli {
         this.p2 = p2;
     }
 
+    /**Käynnistää pelin ja pelaa niin kauan kunnes jompikumpi pelaajista saavuttaa 3 voittoa.*/
     public void pelaa() {
         while (p1.getVoitot() < 3 && p2.getVoitot() < 3) {
             try {
@@ -32,8 +33,8 @@ public class Peli {
 
             pelatutPelit++;
             PeliTulokset result = pelaaYksiKierros(p1.pelaajanValinta(), p2.pelaajanValinta());
-            if (result == PeliTulokset.PELAAJA1_VOITOT) p1.incrementVoitot();
-            else if (result == PeliTulokset.PELAAJA2_VOITOT) p2.incrementVoitot();
+            if (result == PeliTulokset.PELAAJA1_VOITOT) p1.nostaVoittoja();
+            else if (result == PeliTulokset.PELAAJA2_VOITOT) p2.nostaVoittoja();
             else tasaPelit++;
             printStatus();
         }
@@ -42,6 +43,7 @@ public class Peli {
         }
     }
 
+    /**Pelaa yhden kierroksen ja palauttaa voittajan.*/
     public PeliTulokset pelaaYksiKierros(String p1Choice, String p2Choice) {
         if (p1Choice.equals(p2Choice)) {return PeliTulokset.TASAPELI;}
         if ((p1Choice.equals(KIVI) && p2Choice.equals(SAKSET)) ||
@@ -51,15 +53,18 @@ public class Peli {
         return PeliTulokset.PELAAJA2_VOITOT;
     }
 
+    /**Tulostaa pelin tämän hetkisen tilanteen.*/
     private void printStatus() {
         System.out.printf("Erä: %d\nTasapelit: %d\nPelaaja 1 Voittaa: %d\nPelaaja 2 Voittaa: %d\n",
                 getPelatutPelit(), getTasapelit(), p1.getVoitot(), p2.getVoitot());
     }
 
+    /**Hakee pelin tasapeli-arvon käynnissä olevasta pelistä*/
     public int getTasapelit() {
         return tasaPelit;
     }
 
+    /**Hakee pelin pelattujen pelien määrän*/
     public int getPelatutPelit() {
         return pelatutPelit;
     }
