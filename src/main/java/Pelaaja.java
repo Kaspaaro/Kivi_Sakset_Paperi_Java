@@ -1,9 +1,7 @@
-
-package kivipaperisakset;
-
 /**
  *
  * @author Ira Dook
+ * Muokattu/Korjattu, Kaspar Tullus
  */
 public class Pelaaja {
     private int voitot;
