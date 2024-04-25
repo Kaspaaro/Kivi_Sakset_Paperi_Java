@@ -1,11 +1,11 @@
-/**
- *
- * @author Ira Dook
- * Muokattu/Korjattu, Kaspar Tullus
- */
+    /**
+    *
+    * @author Ira Dook
+    * Muokattu/Korjattu, Kaspar Tullus
+    */
 
-/**täälä lasketaan kaikki yhden pelaajan voitot ja pelaajan valinnat*/
-public class Pelaaja {
+    /**täälä lasketaan kaikki yhden pelaajan voitot ja pelaajan valinnat*/
+    public class Pelaaja {
     private int voitot;
 
     /**Lasketaan Math.random() * 3 avulla pelaajan valinta "kivi,sakset,paperi"*/

@@ -31,6 +31,7 @@ public class Peli {
         }
         tulostaVoittaja();
     }
+
     /***Odottaa 1 sekunnin ennen seuraavaa kierrosta.*/
     private void odota() {
         try {
@@ -40,6 +41,7 @@ public class Peli {
             throw new RuntimeException("Pelin odotuksessa tapahtui virhe: ", e);
         }
     }
+
     /**Prosessoi yhden kierroksen ja nostaa voittajan voittoja.*/
     private void prosessoiKierros() {
         PeliTulokset result = pelaaYksiKierros(p1.pelaajanValinta(), p2.pelaajanValinta());
@@ -47,6 +49,7 @@ public class Peli {
         else if (result == PeliTulokset.PELAAJA2_VOITOT) p2.nostaVoittoja();
         else tasaPelit++;
     }
+
     /**Tulostaa voittajan, jos jompikumpi pelaajista saavuttaa 3 voittoa.*/
     private void tulostaVoittaja() {
         if (p1.getVoitot() == 3 || p2.getVoitot() == 3) {
