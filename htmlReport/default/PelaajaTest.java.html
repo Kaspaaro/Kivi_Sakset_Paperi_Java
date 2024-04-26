@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PelaajaTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java in KiviPaperiSakset Coverage Results</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">PelaajaTest.java</span></div><h1>PelaajaTest.java</h1><pre class="source lang-java linenums">import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
+/**
+ * @author Kaspar Tullus
+ */
+
+/** PelaajaTest - Testaa pelaajan toimintaa (Junit 5,Mockito)*/
+<span class="fc" id="L17">public class PelaajaTest {</span>
+    private Peli peli; //Kivisakset paperi peli
+    private Pelaaja p1, p2, pelaaja; //Kaikki pelaajat pelissä
+
+    /**
+     * Aloitellaan alustamalla mock-pelaajat,yksi ei mockattu-pelaaja ja peli
+     * */
+
+    @BeforeEach
+    public void setUp() {
+<span class="fc" id="L27">        p1 = Mockito.mock(Pelaaja.class); //Mockattu pelaaja</span>
+<span class="fc" id="L28">        p2 = Mockito.mock(Pelaaja.class); //Mockattu pelaaja</span>
+<span class="fc" id="L29">        pelaaja = new Pelaaja(); //Ei mockattu pelaaja</span>
+<span class="fc" id="L30">        peli = new Peli(p1, p2); //Anneetaan pelille mockattut pelaajat</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Testaa pelaaja ykkösen voittoja
+     * */
+    @Test
+    public void testPelaajaYksiVoittaa() {
+
+        //Mockataan pelaajien valinnat ja voitot
+<span class="fc" id="L40">        when(p1.getVoitot()).thenReturn(2, 3);</span>
+<span class="fc" id="L41">        when(p2.getVoitot()).thenReturn(2, 2);</span>
+
+<span class="fc" id="L43">        when(p1.pelaajanValinta()).thenReturn(&quot;kivi&quot;);</span>
+<span class="fc" id="L44">        when(p2.pelaajanValinta()).thenReturn(&quot;sakset&quot;);</span>
+
+        //Pelataan peliä mock pelaajilla
+<span class="fc" id="L47">        peli.pelaa();</span>
+
+        //Tulokset, Pelaaja 1 voittaa
+<span class="fc" id="L50">        assertEquals(3, p1.getVoitot());</span>
+<span class="fc" id="L51">        assertEquals(2, p2.getVoitot());</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * Testaa pelaaja kakkosen voittoja
+     * */
+    @Test
+    public void testPelaajaKaksiVoittaa() {
+        //Mockataan pelaajien valinnat ja voitot
+<span class="fc" id="L60">        when(p1.getVoitot()).thenReturn(2, 2);</span>
+<span class="fc" id="L61">        when(p2.getVoitot()).thenReturn(2, 3);</span>
+
+<span class="fc" id="L63">        when(p1.pelaajanValinta()).thenReturn(&quot;sakset&quot;);</span>
+<span class="fc" id="L64">        when(p2.pelaajanValinta()).thenReturn(&quot;kivi&quot;);</span>
+
+        //Pelataan peliä mock pelaajilla
+<span class="fc" id="L67">        peli.pelaa();</span>
+
+        //Tulokset, Pelaaja 2 voittaa
+<span class="fc" id="L70">        assertEquals(2, p1.getVoitot());</span>
+<span class="fc" id="L71">        assertEquals(3, p2.getVoitot());</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Testaa pelaajan voittojen laskemista
+     * */
+    @Test
+    public void nostaVoittoja_nostaVoittojaYhdellä() {
+<span class="fc" id="L79">        int initialVoitot = pelaaja.getVoitot();</span>
+<span class="fc" id="L80">        pelaaja.nostaVoittoja();</span>
+<span class="fc" id="L81">        assertEquals(initialVoitot + 1, pelaaja.getVoitot());</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Testaa Lasketut voitot
+     * */
+    @Test
+    public void getVoitot_palauttaaLasketutVoitot() {
+<span class="fc" id="L89">        pelaaja.nostaVoittoja();</span>
+<span class="fc" id="L90">        pelaaja.nostaVoittoja();</span>
+<span class="fc" id="L91">        assertEquals(2, pelaaja.getVoitot());</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Testaa pelaajan valintoja, onko kyseessä kivi, paperi vai sakset
+     * */
+
+    @Test
+    public void pelaajanValinta_PalauttaValitunArvon() {
+<span class="fc" id="L100">        String valinta = pelaaja.pelaajanValinta();</span>
+<span class="pc bpc" id="L101" title="4 of 6 branches missed.">        assertTrue(valinta.equals(&quot;kivi&quot;) || valinta.equals(&quot;paperi&quot;) || valinta.equals(&quot;sakset&quot;));</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Testaa montako vaihtoehtoja pelajalla on mistä voi valita.
+     * */
+
+    @Test
+    public void pelaajanValinta_palauttaaErilaisiaVaihtoehtoja() {
+<span class="fc" id="L110">        Set&lt;String&gt; choices = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        for (int i = 0; i &lt; 100; i++) {</span>
+<span class="fc" id="L112">            choices.add(pelaaja.pelaajanValinta());</span>
+        }
+<span class="fc" id="L114">        assertEquals(3, choices.size());</span>
+<span class="fc" id="L115">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

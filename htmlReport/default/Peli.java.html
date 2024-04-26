@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Peli.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java in KiviPaperiSakset Coverage Results</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Peli.java</span></div><h1>Peli.java</h1><pre class="source lang-java linenums">/**
+ * Peli-luokka, joka sisältää pelin logiikan.
+ *
+ * @author Ira Dook
+ * * Muokattu/Korjattu, Kaspar Tullus
+ */
+
+public class Peli {
+    private static final String KIVI = &quot;kivi&quot;;
+    private static final String PAPERI = &quot;paperi&quot;;
+    private static final String SAKSET = &quot;sakset&quot;;
+
+    private final Pelaaja p1;
+    private final Pelaaja p2;
+
+    private int tasaPelit;
+    private int pelatutPelit;
+
+<span class="fc" id="L19">    public Peli(Pelaaja p1, Pelaaja p2) {</span>
+<span class="fc" id="L20">        this.p1 = p1;</span>
+<span class="fc" id="L21">        this.p2 = p2;</span>
+<span class="fc" id="L22">    }</span>
+
+    /**Käynnistää pelin ja pelaa niin kauan kunnes jompikumpi pelaajista saavuttaa 3 voittoa.*/
+    public void pelaa() {
+<span class="fc bfc" id="L26" title="All 4 branches covered.">        while (p1.getVoitot() &lt; 3 &amp;&amp; p2.getVoitot() &lt; 3) {</span>
+<span class="fc" id="L27">            odota();</span>
+<span class="fc" id="L28">            pelatutPelit++;</span>
+<span class="fc" id="L29">            prosessoiKierros();</span>
+<span class="fc" id="L30">            printStatus();</span>
+        }
+<span class="fc" id="L32">        tulostaVoittaja();</span>
+<span class="fc" id="L33">    }</span>
+
+    /***Odottaa 1 sekunnin ennen seuraavaa kierrosta.*/
+    private void odota() {
+        try {
+<span class="fc" id="L38">            Thread.sleep(1000);</span>
+<span class="fc" id="L39">        } catch (InterruptedException e) {</span>
+<span class="fc" id="L40">            Thread.currentThread().interrupt();</span>
+<span class="fc" id="L41">            throw new RuntimeException(&quot;Pelin odotuksessa tapahtui virhe: &quot;, e);</span>
+<span class="fc" id="L42">        }</span>
+<span class="fc" id="L43">    }</span>
+
+    /**Prosessoi yhden kierroksen ja nostaa voittajan voittoja.*/
+    private void prosessoiKierros() {
+<span class="fc" id="L47">        PeliTulokset result = pelaaYksiKierros(p1.pelaajanValinta(), p2.pelaajanValinta());</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (result == PeliTulokset.PELAAJA1_VOITOT) p1.nostaVoittoja();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        else if (result == PeliTulokset.PELAAJA2_VOITOT) p2.nostaVoittoja();</span>
+<span class="fc" id="L50">        else tasaPelit++;</span>
+<span class="fc" id="L51">    }</span>
+
+    /**Tulostaa voittajan, jos jompikumpi pelaajista saavuttaa 3 voittoa.*/
+    private void tulostaVoittaja() {
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">        if (p1.getVoitot() == 3 || p2.getVoitot() == 3) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">            System.out.printf(&quot;Pelaaja %d voitti pelin!\n&quot;, p1.getVoitot() == 3 ? 1 : 2);</span>
+        }
+<span class="fc" id="L58">    }</span>
+
+    /**Pelaa yhden kierroksen ja palauttaa voittajan.*/
+    public PeliTulokset pelaaYksiKierros(String p1Choice, String p2Choice) {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (p1Choice.equals(p2Choice)) {</span>
+<span class="fc" id="L63">            return PeliTulokset.TASAPELI;</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">        } else if (p1Choice.equals(KIVI) &amp;&amp; p2Choice.equals(SAKSET) ||</span>
+<span class="fc bfc" id="L65" title="All 4 branches covered.">                p1Choice.equals(PAPERI) &amp;&amp; p2Choice.equals(KIVI) ||</span>
+<span class="fc bfc" id="L66" title="All 4 branches covered.">                p1Choice.equals(SAKSET) &amp;&amp; p2Choice.equals(PAPERI)) {</span>
+<span class="fc" id="L67">            return PeliTulokset.PELAAJA1_VOITOT;</span>
+        } else {
+<span class="fc" id="L69">            return PeliTulokset.PELAAJA2_VOITOT;</span>
+        }
+    }
+
+    /**Tulostaa pelin tämän hetkisen tilanteen.*/
+    private void printStatus() {
+<span class="fc" id="L75">        System.out.printf(&quot;Erä: %d\nTasapelit: %d\nPelaaja 1 Voittaa: %d\nPelaaja 2 Voittaa: %d\n&quot;,</span>
+<span class="fc" id="L76">                getPelatutPelit(), getTasapelit(), p1.getVoitot(), p2.getVoitot());</span>
+<span class="fc" id="L77">    }</span>
+
+    /**Hakee pelin tasapeli-arvon käynnissä olevasta pelistä*/
+    public int getTasapelit() {
+<span class="fc" id="L81">        return tasaPelit;</span>
+    }
+
+    /**Hakee pelin pelattujen pelien määrän*/
+    public int getPelatutPelit() {
+<span class="fc" id="L86">        return pelatutPelit;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

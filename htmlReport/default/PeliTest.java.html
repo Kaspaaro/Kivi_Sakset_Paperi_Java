@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeliTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java in KiviPaperiSakset Coverage Results</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">PeliTest.java</span></div><h1>PeliTest.java</h1><pre class="source lang-java linenums">
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
+/**@author Kaspar Tullus */
+
+/**PeliTest - Testaa pelin toimintaa (Junit 5,Mockito)*/
+<span class="fc" id="L14">public class PeliTest {</span>
+    private Peli peli;
+    private Pelaaja p1;
+    private Pelaaja p2;
+
+    @BeforeEach
+    public void setUp() {
+<span class="fc" id="L21">        p1 = Mockito.mock(Pelaaja.class);</span>
+<span class="fc" id="L22">        p2 = Mockito.mock(Pelaaja.class);</span>
+<span class="fc" id="L23">        peli = new Peli(p1, p2);</span>
+<span class="fc" id="L24">    }</span>
+
+    /** Testaa pelaaYksiKierros-metodia
+     * @param p1Valinta pelaajan &quot;Yhden&quot; valinta, esim. kivi
+     * @param p2Valinta pelaajan &quot;Kahden&quot; valinta, esim. sakset
+     * @param expectedOutcome odotettu tulos, esim. PELAAJA1_VOITOT
+     */
+    @ParameterizedTest
+    @CsvSource({
+            &quot;kivi, sakset, PELAAJA1_VOITOT&quot;,
+            &quot;sakset, kivi, PELAAJA2_VOITOT&quot;,
+            &quot;kivi, kivi, TASAPELI&quot;,
+            &quot;paperi, kivi, PELAAJA1_VOITOT&quot;,
+            &quot;kivi, paperi, PELAAJA2_VOITOT&quot;,
+            &quot;paperi, paperi, TASAPELI&quot;,
+            &quot;sakset, paperi, PELAAJA1_VOITOT&quot;,
+            &quot;paperi, sakset, PELAAJA2_VOITOT&quot;,
+            &quot;sakset, sakset, TASAPELI&quot;
+    })
+    public void testYksiKierros(String p1Valinta, String p2Valinta, PeliTulokset expectedOutcome) {
+<span class="fc" id="L44">        PeliTulokset result = peli.pelaaYksiKierros(p1Valinta, p2Valinta);</span>
+<span class="fc" id="L45">        assertEquals(expectedOutcome, result);</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Testaa pelin tasapeli tuloksen laskemista
+     * */
+
+    @Test
+    public void testTasaPelitLaskettuOikein() {
+        //Mockataan pelaajien valinnat ja voitot
+<span class="fc" id="L55">        when(p1.getVoitot()).thenReturn(1, 1,2,3);</span>
+<span class="fc" id="L56">        when(p2.getVoitot()).thenReturn(1, 1,2,2);</span>
+<span class="fc" id="L57">        when(p1.pelaajanValinta()).thenReturn(&quot;sakset&quot;,&quot;kivi&quot;);</span>
+<span class="fc" id="L58">        when(p2.pelaajanValinta()).thenReturn(&quot;kivi&quot;, &quot;kivi&quot;);</span>
+
+        //Pelataan peliä mock pelaajilla
+<span class="fc" id="L61">        peli.pelaa();</span>
+
+        //Tulokset, Tasapelit 2
+<span class="fc" id="L64">        assertEquals(1, peli.getTasapelit());</span>
+
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Testaa pelin tasapeli tuloksen laskemista
+     * */
+
+    @Test
+    public void test_PelinOdotusVirhe() {
+
+        //Mock Pelaajat
+<span class="fc" id="L76">        when(p1.getVoitot()).thenReturn(0);</span>
+<span class="fc" id="L77">        when(p2.getVoitot()).thenReturn(0);</span>
+<span class="fc" id="L78">        when(p1.pelaajanValinta()).thenReturn(&quot;sakset&quot;,&quot;kivi&quot;);</span>
+<span class="fc" id="L79">        when(p2.pelaajanValinta()).thenReturn(&quot;kivi&quot;, &quot;kivi&quot;);</span>
+
+<span class="fc" id="L81">        Peli peli = new Peli(p1, p2);</span>
+<span class="fc" id="L82">        Thread.currentThread().interrupt();</span>
+
+<span class="fc" id="L84">        assertThrows(RuntimeException.class, peli::pelaa);</span>
+<span class="fc" id="L85">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
