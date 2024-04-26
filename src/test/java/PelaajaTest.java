@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 
 /** PelaajaTest - Testaa pelaajan toimintaa (Junit 5,Mockito)*/
 public class PelaajaTest {
-    private Peli peli;
-    private Pelaaja p1, p2, pelaaja;
+    private Peli peli; //Kivisakset paperi peli
+    private Pelaaja p1, p2, pelaaja; //Kaikki pelaajat pelissä
 
     /**
      * Aloitellaan alustamalla mock-pelaajat,yksi ei mockattu-pelaaja ja peli
@@ -24,10 +24,10 @@ public class PelaajaTest {
 
     @BeforeEach
     public void setUp() {
-        p1 = Mockito.mock(Pelaaja.class);
-        p2 = Mockito.mock(Pelaaja.class);
-        pelaaja = new Pelaaja();
-        peli = new Peli(p1, p2);
+        p1 = Mockito.mock(Pelaaja.class); //Mockattu pelaaja
+        p2 = Mockito.mock(Pelaaja.class); //Mockattu pelaaja
+        pelaaja = new Pelaaja(); //Ei mockattu pelaaja
+        peli = new Peli(p1, p2); //Anneetaan pelille mockattut pelaajat
     }
 
     /**

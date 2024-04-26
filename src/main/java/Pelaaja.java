@@ -6,7 +6,7 @@
 
     /**täälä lasketaan kaikki yhden pelaajan voitot ja pelaajan valinnat*/
     public class Pelaaja {
-    private int voitot;
+    private int voitot; //Voittojen lukumäärä
 
     /**Lasketaan Math.random() * 3 avulla pelaajan valinta "kivi,sakset,paperi"*/
     public String pelaajanValinta() {
@@ -20,4 +20,5 @@
     public int getVoitot() {
         return voitot;
     }
+
 }
