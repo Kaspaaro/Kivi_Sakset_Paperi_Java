@@ -10,8 +10,8 @@ public class Peli {
     private static final String PAPERI = "paperi";
     private static final String SAKSET = "sakset";
 
-    private final Pelaaja p1;
-    private final Pelaaja p2;
+    private final Pelaaja p1; //Pelaaja 1
+    private final Pelaaja p2; //Pelaaja 2
 
     private int tasaPelit;
     private int pelatutPelit;
@@ -24,12 +24,12 @@ public class Peli {
     /**Käynnistää pelin ja pelaa niin kauan kunnes jompikumpi pelaajista saavuttaa 3 voittoa.*/
     public void pelaa() {
         while (p1.getVoitot() < 3 && p2.getVoitot() < 3) {
-            odota();
-            pelatutPelit++;
-            prosessoiKierros();
-            printStatus();
+            odota(); //Odotetaan 1 sekunti
+            pelatutPelit++; //Nostetaan pelattujen pelien määrää
+            prosessoiKierros(); //Pelaa yhden kierroksen
+            printStatus(); // Tulostaa pelin tilanteen
         }
-        tulostaVoittaja();
+        tulostaVoittaja(); //Tulostaa voittajan
     }
 
     /***Odottaa 1 sekunnin ennen seuraavaa kierrosta.*/
@@ -45,6 +45,7 @@ public class Peli {
     /**Prosessoi yhden kierroksen ja nostaa voittajan voittoja.*/
     private void prosessoiKierros() {
         PeliTulokset result = pelaaYksiKierros(p1.pelaajanValinta(), p2.pelaajanValinta());
+        //Taskistetaan mitä result palautti ja nostetaan voittajan pisteitä
         if (result == PeliTulokset.PELAAJA1_VOITOT) p1.nostaVoittoja();
         else if (result == PeliTulokset.PELAAJA2_VOITOT) p2.nostaVoittoja();
         else tasaPelit++;
@@ -61,6 +62,7 @@ public class Peli {
     public PeliTulokset pelaaYksiKierros(String p1Choice, String p2Choice) {
         if (p1Choice.equals(p2Choice)) {
             return PeliTulokset.TASAPELI;
+            //Tarkistetaan vaihtoehdot ja palautetaan voittaja
         } else if (p1Choice.equals(KIVI) && p2Choice.equals(SAKSET) ||
                 p1Choice.equals(PAPERI) && p2Choice.equals(KIVI) ||
                 p1Choice.equals(SAKSET) && p2Choice.equals(PAPERI)) {
